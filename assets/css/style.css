@@ -26,8 +26,7 @@ body {
 }
 
 .top {
-  background-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0px 0px 30px rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .anchor {
@@ -39,12 +38,31 @@ body {
 
 #header {
   width: 100%;
+
+  background-image: url(../img/lisa-sofie.jpg);
+  overflow: hidden;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: 50% 50%;
+
+  box-shadow: 0px 0px 30px rgba(0,0,0,0.7);
+}
+
+#headerMiddle {
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 #headerTop {
-  padding-left: 50px;
-  padding-right: 50px;
-  color: #FFFFFF;
+  height:50px;
+}
+
+.big-header {
+    font-family: "gi";
+    color: rgba(0,0,0,0.5);
+    text-shadow: 0px 0px 10px rgba(0,0,0,1);
+    margin-bottom: -20px;
 }
 
 container a.anchor{
@@ -161,28 +179,28 @@ h1 {
 
 @media all and (min-width: 660px) {
   .big-header {
-    font-family: "gi";
-    color: transparent;
-    text-shadow: 0px 0px 3px #FFFFFF;
     font-size: 60pt;
-  }
+   }
 }
 
 @media all and (min-width: 400px) and (max-width: 659px) {
   .big-header {
-    font-family: "gi";
-    color: transparent;
-    text-shadow: 0px 0px 3px #FFFFFF;
-    font-size: 30pt;
+    font-size: 35pt;
+  }
+  #headerTop {
+    display: none;
+  }
+  #headerMiddle {
+    padding-top: 0px;
   }
 }
 
 @media all and (max-width: 399px) {
-  .big-header {
-    font-family: "gi";
-    color: transparent;
-    text-shadow: 0px 0px 1px #FFFFFF;
-    font-size: 12pt;
+  #headerTop {
+    display: none;
+  }
+  #headerMiddle {
+    display: none;
   }
 }
 

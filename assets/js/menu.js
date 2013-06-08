@@ -24,7 +24,7 @@ $(function() {
             goHome.css({
                 visibility: 'visible'
             })
-            nav.addClass('top');
+            //nav.addClass('top');
             isFixed = true;
         }
         else if (!shouldBeFixed && isFixed)
@@ -38,7 +38,7 @@ $(function() {
                 top: '-100px',
                 visibility: 'hidden'
             });
-            nav.removeClass('top');
+            //nav.removeClass('top');
             goHome.css({
                 visibility: 'hidden'
             })
