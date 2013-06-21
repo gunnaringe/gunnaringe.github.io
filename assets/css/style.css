@@ -1,6 +1,12 @@
 body, a {
   color: rgb(80, 80, 80);
   text-decoration: none;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.handwritten {
+  font-family: 'gi';
+  font-size: 26pt;
 }
 
 a:hover {
@@ -83,7 +89,7 @@ container a.anchor{
 /* Meny */
 #nav ul {
   vertical-align: text-bottom;
-  font-family: "Gill Sans Extrabold", Helvetica, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   font-size: 16pt;
   margin: 0;
   padding: 0;
@@ -207,6 +213,10 @@ h1 {
   #headerMiddle {
     padding-top: 0px;
   }
+}
+
+.wide {
+  width: 100%;
 }
 
 @media all and (max-width: 399px) {
