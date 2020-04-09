@@ -81,60 +81,6 @@ table {
     And yes, there is a lot of repetition there because of -prefixes but we don't
     want to leave anybody behind.
 */
-body {
-    font-family: 'PT Sans', sans-serif;
-    min-height: 740px;
-
-    background: rgb(215, 215, 215);
-    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
-    background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:    -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:     -ms-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:      -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-    background:         radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-}
-
-/*
-    Now let's bring some text styles back ...
-*/
-b, strong { font-weight: bold }
-i, em { font-style: italic }
-
-/*
-    ... and give links a nice look.
-*/
-a {
-    color: inherit;
-    text-decoration: none;
-    padding: 0 0.1em;
-    background: rgba(255,255,255,0.5);
-    text-shadow: -1px -1px 2px rgba(100,100,100,0.9);
-    border-radius: 0.2em;
-
-    -webkit-transition: 0.5s;
-    -moz-transition:    0.5s;
-    -ms-transition:     0.5s;
-    -o-transition:      0.5s;
-    transition:         0.5s;
-}
-
-a:hover,
-a:focus {
-    background: rgba(255,255,255,1);
-    text-shadow: -1px -1px 2px rgba(100,100,100,0.5);
-}
-
-/*
-    Because the main point behind the impress.js demo is to demo impress.js
-    we display a fallback message for users with browsers that don't support
-    all the features required by it.
-
-    All of the content will be still fully accessible for them, but I want
-    them to know that they are missing something - that's what the demo is
-    about, isn't it?
-
-    And then we hide the message, when support is detected in the browser.
-*/
 
 .fallback-message {
     font-family: sans-serif;
@@ -147,6 +93,11 @@ a:focus {
     border: 1px solid #E4C652;
     border-radius: 10px;
     background: #EEDC94;
+}
+
+#impress {
+    z-index: -1;
+    float: left;
 }
 
 .fallback-message p {
@@ -696,45 +647,3 @@ body.impress-mouse-timeout {
     -o-transition:      opacity 1s 5s,      -o-transform 0.5s 4.5s;
     transition:         opacity 1s 5s,         transform 0.5s 4.5s;
 }
-
-/*
-    And as the last thing there is a workaround for quite strange bug.
-    It happens a lot in Chrome. I don't remember if I've seen it in Firefox.
-
-    Sometimes the element positioned in 3D (especially when it's moved back
-    along Z axis) is not clickable, because it falls 'behind' the <body>
-    element.
-
-    To prevent this, I decided to make <body> non clickable by setting
-    pointer-events property to `none` value.
-    Value if this property is inherited, so to make everything else clickable
-    I bring it back on the #impress element.
-
-    If you want to know more about `pointer-events` here are some docs:
-    https://developer.mozilla.org/en/CSS/pointer-events
-
-    There is one very important thing to notice about this workaround - it makes
-    everything 'unclickable' except what's in #impress element.
-
-    So use it wisely ... or don't use at all.
-*/
-.impress-enabled                          { pointer-events: none }
-.impress-enabled #impress                 { pointer-events: auto }
-.impress-enabled #impress-toolbar         { pointer-events: auto }
-.impress-enabled #impress-console-button  { pointer-events: auto }
-/*
-    There is one funny thing I just realized.
-
-    Thanks to this workaround above everything except #impress element is invisible
-    for click events. That means that the hint element is also not clickable.
-    So basically all of this transforms and delayed transitions trickery was probably
-    not needed at all...
-
-    But it was fun to learn about it, wasn't it?
-*/
-
-/*
-    That's all I have for you in this file.
-    Thanks for reading. I hope you enjoyed it at least as much as I enjoyed writing it
-    for you.
-*/

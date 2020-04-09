@@ -367,7 +367,7 @@
             } );
 
             var rootStyles = {
-                position: "absolute",
+                position: "relative",
                 transformOrigin: "top left",
                 transition: "all 0s ease-in-out",
                 transformStyle: "preserve-3d"
