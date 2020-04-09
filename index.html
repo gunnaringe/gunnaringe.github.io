@@ -6,10 +6,11 @@
     <meta name="description" content="Home of Gunnar Inge Gj&oslash;vik Sortland"/>
     <meta name="author" content="Gunnar Inge Gj&oslash;vik Sortland"/>
 
-    <link href="assets/css/style.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet"/>
 
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -18,8 +19,9 @@
 
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -71,16 +73,29 @@
      data-perspective="1000"
 >
 
-    <div id="about" class="step slide" data-x="-1000" data-y="-1500">
+    <div id="about" class="step" data-x="-2000" data-y="-1500">
+        <div class="center">
+            <img src="assets/img/gi.svg" width="20%" style="margin-right: 50px;"/>
+            <span class="handwritten">
+                <p class="big-text">Gunnar Inge Gjøvik Sortland</p>
+                <a href="mailto:gunnaringe@gmail.com">gunnaringe@gmail.com</a>
+                <a class="nav-link" href="#contact">Contact</a>
+            </span>
+        </div>
+    </div>
+
+    <div id="about2" class="step slide" data-x="-1000" data-y="-1500">
         <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
     </div>
 
     <div id="contact" class="step slide" data-x="0" data-y="-1500">
-        <q>Don’t you think that presentations given <strong>in modern browsers</strong> shouldn’t <strong>copy the limits</strong> of ‘classic’ slide decks?</q>
+        <q>Don’t you think that presentations given <strong>in modern browsers</strong> shouldn’t <strong>copy the
+            limits</strong> of ‘classic’ slide decks?</q>
     </div>
 
     <div class="step slide" data-x="1000" data-y="-1500">
-        <q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your talk?</q>
+        <q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your
+            talk?</q>
     </div>
 
     <div id="title" class="step" data-x="0" data-y="0" data-scale="4">
@@ -104,19 +119,29 @@
     </div>
 
     <div id="ing" class="step" data-x="3500" data-y="-850" data-z="0" data-rotate="270" data-scale="6">
-        <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b class="scaling">scaling</b> them on an infinite canvas</p>
+        <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b
+                class="scaling">scaling</b> them on an infinite canvas</p>
     </div>
 
     <div id="imagination" class="step" data-x="6700" data-y="-300" data-scale="6">
         <p>the only <b>limit</b> is your <b class="imagination">imagination</b></p>
     </div>
 </div>
-<script src="assets/js/impress.js"></script>
-<script>impress().init();</script>
+<script src="assets/js/impress.min.js"></script>
+<script>
+    const api = impress();
+    api.init();
+</script>
 
 <!-- Bootstrap -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 </html>

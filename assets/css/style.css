@@ -1,6 +1,25 @@
-#impress {
-    z-index: -1;
-    float: left;
+.handwritten {
+    font-family: 'gi';
+}
+
+@font-face {
+    font-family:'gi';
+    src: url('../font/gi.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.big-text {
+    font-size: 55pt;
+}
+
+.center {
+    display:flex;
+    align-items:center;
+}
+
+.navbar {
+    z-index: 1;
 }
 
 .step {
