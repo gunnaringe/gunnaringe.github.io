@@ -8,9 +8,8 @@
 
     <link href="assets/css/style.css" rel="stylesheet"/>
 
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/0704df1b3d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -36,35 +35,8 @@
     </div>
 </nav>
 
-
-<!--
-
-    Now that's the core element used by impress.js.
-
-    That's the wrapper for your presentation steps. In this element all the impress.js magic happens.
-    It doesn't have to be a `<div>`. Only `id` is important here as that's how the script find it.
-
-    Often you don't need to use any attributes here, but for educational purposes I have used all of them below.
-
-    To change the duration of the transition between slides use `data-transition-duration="2000"` giving it
-    a number of ms. It defaults to 1000 (1s).
-
-    When authoring impress.js presentations, you should target some screen size, which you can define here.
-    The default is 1024 x 768. You should write your CSS as if this is the screen size used for the
-    presentation. When you present your presentation on a screen (or browser window) of different size,
-    impress.js will automatically scale the presentation to fit the screen. The minimum and maximum limits
-    to this scaling can also be defined here.
-
-    NOTE: I intend to change the defaults to target HD screens in 2021. So you may want to make a habit
-    of explicitly defining these attributes for now, to avoid any disruption when the defaults change.
-
-    You can also control the perspective with `data-perspective="500"` giving it a number of pixels.
-    It defaults to 1000. You can set it to 0 if you don't want any 3D effects.
-    If you are willing to change this value make sure you understand how CSS perspective works:
-    https://developer.mozilla.org/en/CSS/perspective
--->
 <div id="impress"
-     data-transition-duration="1000"
+     data-transition-duration="1500"
 
      data-width="1024"
      data-height="768"
@@ -73,65 +45,36 @@
      data-perspective="1000"
 >
 
-    <div id="about" class="step" data-x="-2000" data-y="-1500">
+    <div id="about" class="step" data-x="-2000" data-y="-1500" data-scale="100">
         <div class="center">
             <img src="assets/img/gi.svg" width="20%" style="margin-right: 50px;"/>
             <span class="handwritten">
                 <p class="big-text">Gunnar Inge Gjøvik Sortland</p>
-                <a href="mailto:gunnaringe@gmail.com">gunnaringe@gmail.com</a>
-                <a class="nav-link" href="#contact">Contact</a>
+                <a class="link" href="mailto:gunnaringe@gmail.com">gunnaringe@gmail.com</a>
             </span>
         </div>
     </div>
 
-    <div id="about2" class="step slide" data-x="-1000" data-y="-1500">
-        <q>Aren’t you just <b>bored</b> with all those slides-based presentations?</q>
-    </div>
-
-    <div id="contact" class="step slide" data-x="0" data-y="-1500">
-        <q>Don’t you think that presentations given <strong>in modern browsers</strong> shouldn’t <strong>copy the
-            limits</strong> of ‘classic’ slide decks?</q>
-    </div>
-
-    <div class="step slide" data-x="1000" data-y="-1500">
-        <q>Would you like to <strong>impress your audience</strong> with <strong>stunning visualization</strong> of your
-            talk?</q>
-    </div>
-
-    <div id="title" class="step" data-x="0" data-y="0" data-scale="4">
-        <span class="try">then you should try</span>
-        <h1>impress.js<sup>*</sup></h1>
-        <span class="footnote"><sup>*</sup> no rhyme intended</span>
-    </div>
-
-    <div id="its" class="step" data-x="850" data-y="3000" data-rotate="90" data-scale="5">
-        <p>It’s a <strong>presentation tool</strong> <br/>
-            inspired by the idea behind <a href="http://prezi.com">prezi.com</a> <br/>
-            and based on the <strong>power of CSS3 transforms and transitions</strong> in modern browsers.</p>
-    </div>
-
-    <div id="big" class="step" data-x="3500" data-y="2100" data-rotate="180" data-scale="6">
-        <p>visualize your <b>big</b> <span class="thoughts">thoughts</span></p>
-    </div>
-
-    <div id="tiny" class="step" data-x="2825" data-y="2325" data-z="-3000" data-rotate="300" data-scale="1">
-        <p>and <b>tiny</b> ideas</p>
-    </div>
-
-    <div id="ing" class="step" data-x="3500" data-y="-850" data-z="0" data-rotate="270" data-scale="6">
-        <p>by <b class="positioning">positioning</b>, <b class="rotating">rotating</b> and <b
-                class="scaling">scaling</b> them on an infinite canvas</p>
-    </div>
-
-    <div id="imagination" class="step" data-x="6700" data-y="-300" data-scale="6">
-        <p>the only <b>limit</b> is your <b class="imagination">imagination</b></p>
+    <div id="contact" class="step" data-x="-29000" data-y="-11000" data-scale="10" data-rotate="30">
+        <div class="center">
+            <i class="fab fa-keybase"></i><a style="margin-left: 10px;" class="link handwritten" href="https://keybase.io/gunnaringe">Keybase</a>
+        </div>
+        <div class="center">
+            <i class="fab fa-github"></i><a style="margin-left: 10px;"class="link handwritten" href="https://github.com/gunnaringe">GitHub</a>
+        </div>
+        <div class="center">
+            <a class="link" href="https://twitter.com/gunnaringe">
+                <i class="fab fa-twitter"></i>
+                <span class="handwritten" style="margin-left: 10px;">Twitter</span>
+            </a>
+        </div>
+        <div class="center">
+            <i class="fab fa-linkedin-in"></i><a style="margin-left: 10px;"class="link handwritten" href="http://www.linkedin.com/in/gunnaringesortland/">LinkedIn</a>
+        </div>
     </div>
 </div>
 <script src="assets/js/impress.min.js"></script>
-<script>
-    const api = impress();
-    api.init();
-</script>
+<script>impress().init();</script>
 
 <!-- Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
