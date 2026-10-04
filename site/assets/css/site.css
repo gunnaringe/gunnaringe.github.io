@@ -259,6 +259,47 @@ kbd {
   color: var(--muted);
 }
 
+.app-shot {
+  display: block;
+  text-decoration: none;
+  margin-top: 1.25rem;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.app-shot:hover {
+  border-color: var(--accent);
+}
+
+.app-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1.5px solid var(--line);
+}
+
+.app-shot-bar > span:not(.app-shot-url) {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.app-shot-url {
+  margin-left: 0.6rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.app-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .links-list {
   display: grid;
   gap: 0.6rem;
@@ -390,15 +431,22 @@ kbd {
   }
 
   .zoom .frame-about {
-    --x: 790px;
-    --y: -20px;
+    --x: 640px;
+    --y: -60px;
     --r: 2.5deg;
     --s: 0.72;
   }
 
+  .zoom .frame-apps {
+    --x: 650px;
+    --y: 400px;
+    --r: -2deg;
+    --s: 0.62;
+  }
+
   .zoom .frame-contact {
-    --x: 300px;
-    --y: 440px;
+    --x: 40px;
+    --y: 370px;
     --r: -3deg;
     --s: 0.68;
     width: 28rem;

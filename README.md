@@ -7,7 +7,7 @@ nothing loaded from third parties.
 
 ## How it works
 
-- **Zoom view.** On larger screens the three sections are cards on a canvas, and
+- **Zoom view.** On larger screens the four sections are cards on a canvas, and
   the camera pans and zooms between them (`site/assets/js/site.js`). Card
   positions live in `site/assets/css/site.css` as `--x`, `--y`, `--r`, and `--s`.
 - **Plain view.** A normal scrolling page. Used without JavaScript, on small
@@ -28,6 +28,7 @@ site/            what gets published
 redirect/        the page GitHub Pages serves, forwarding to gunnaringe.sort.land
 tools/           sources for og.png and the PNG icons
 build.sh         site/ -> dist/
+wrangler.jsonc   Cloudflare config: build, assets, custom domain
 ```
 
 ## Local preview
@@ -49,13 +50,13 @@ Then open <http://localhost:8000/>.
 
 ## Deploy
 
-**Cloudflare** (the site): connect this repository in Cloudflare Pages, or in
-Workers with static assets.
-
-- Production branch: `master`
-- Build command: `./build.sh`
-- Output directory: `dist`
-- Custom domain: `gunnaringe.sort.land`
+**Cloudflare** (the site): `wrangler.jsonc` holds the whole setup, so in
+Workers & Pages choose "Import a repository", pick this repository, name the
+project `gunnaringe` (it must match `name` in `wrangler.jsonc`), and keep the
+default deploy command `npx wrangler deploy`. That command runs `build.sh`,
+uploads `dist/` as static assets, and attaches `gunnaringe.sort.land` as a
+custom domain, which creates its DNS record and certificate. This needs the
+`sort.land` zone to be on Cloudflare in the same account.
 
 **GitHub Pages** (the old address): Settings → Pages → Source: "GitHub
 Actions". Then run the "Publish GitHub Pages redirect" workflow by hand. It
