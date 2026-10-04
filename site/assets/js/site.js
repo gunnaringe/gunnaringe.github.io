@@ -1,7 +1,10 @@
 // gunnaringe.sort.land
 //
-// Loaded synchronously in <head> so the `zoom` class is on <html> before the
-// first paint. Everything else waits for DOMContentLoaded.
+// Loaded synchronously in <head> so the `zoom` class and the theme are on
+// <html> before the first paint. Everything else waits for DOMContentLoaded.
+//
+// Themes: "hacker" (default, also what the HTML ships with) and "suit". The
+// choice is kept in localStorage under "theme".
 //
 // Zoom view: the sections are cards on a large canvas (positions live in
 // site.css as --x/--y/--r/--s). A camera { x, y, w, r } describes what is on
@@ -20,29 +23,64 @@
     "screen and (prefers-reduced-motion: no-preference) and (min-width: 60em) and (min-height: 32em)",
   );
 
-  const readPreference = () => {
+  const read = (key) => {
     try {
-      return localStorage.getItem("view");
+      return localStorage.getItem(key);
     } catch {
       return null;
     }
   };
-  const writePreference = (value) => {
+  const write = (key, value) => {
     try {
-      localStorage.setItem("view", value);
+      localStorage.setItem(key, value);
     } catch {
       // Storage can be unavailable (private mode, blocked site data). The
-      // toggle still works for this visit.
+      // toggles still work for this visit.
     }
   };
-  const wantsZoom = () => capable.matches && readPreference() !== "plain";
+  const wantsZoom = () => capable.matches && read("view") !== "plain";
 
   root.classList.toggle("zoom", wantsZoom());
+  root.dataset.theme = read("theme") === "suit" ? "suit" : "hacker";
 
   document.addEventListener("DOMContentLoaded", () => {
     setUpEmail();
+    setUpTheme();
+    setUpHeaderOffset();
     setUpZoom();
   });
+
+  // The header is sticky in plain view; its height (which depends on font and
+  // theme) feeds scroll-padding-top in site.css.
+  function setUpHeaderOffset() {
+    const header = document.querySelector(".site-header");
+    new ResizeObserver(() => {
+      root.style.setProperty("--header-h", `${header.offsetHeight}px`);
+    }).observe(header);
+  }
+
+  function setUpTheme() {
+    const button = document.querySelector(".theme-toggle");
+    const metas = [...document.querySelectorAll("meta[name=theme-color][data-suit]")];
+
+    const show = () => {
+      const hacker = root.dataset.theme === "hacker";
+      button.textContent = hacker ? "Suit" : "Hacker";
+      button.setAttribute("aria-label", hacker ? "Switch to suit theme" : "Switch to hacker theme");
+      for (const meta of metas) meta.content = hacker ? "#000000" : meta.dataset.suit;
+    };
+
+    button.addEventListener("click", () => {
+      root.dataset.theme = root.dataset.theme === "hacker" ? "suit" : "hacker";
+      write("theme", root.dataset.theme);
+      show();
+      // Card sizes change with the font; let the zoom view re-fit once the
+      // new font has loaded.
+      document.fonts.ready.then(() => dispatchEvent(new Event("resize")));
+    });
+
+    show();
+  }
 
   // The address is assembled here so it never appears in the HTML source.
   function setUpEmail() {
@@ -280,7 +318,7 @@
     overviewButton.addEventListener("click", () => go(null));
 
     toggle.addEventListener("click", () => {
-      writePreference(enabled ? "plain" : "zoom");
+      write("view", enabled ? "plain" : "zoom");
       setEnabled(!enabled);
     });
 

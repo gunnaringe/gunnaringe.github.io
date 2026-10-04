@@ -13,6 +13,9 @@ nothing loaded from third parties.
 - **Plain view.** A normal scrolling page. Used without JavaScript, on small
   screens, when reduced motion is requested, when printing, or when the visitor
   picks it with the toggle.
+- **Themes.** A header button switches between "hacker" (the default: green
+  terminal with scan lines, after clock.apphub.casa) and "suit" (paper and
+  ink, following the system light/dark setting). The choice is remembered.
 - **Email.** The address is assembled by JavaScript so it never appears in the
   HTML source. Without JavaScript it reads `gunnar.inge [at] sort.land`.
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="hacker">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,8 +20,8 @@
   <meta property="profile:last_name" content="Gjøvik Sortland">
   <meta name="twitter:card" content="summary_large_image">
 
-  <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#16181d" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#000000" data-suit="#f6f3ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" data-suit="#16181d" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="icon" href="/assets/img/icon.svg?v=dev" type="image/svg+xml">
@@ -29,6 +29,7 @@
   <link rel="manifest" href="/site.webmanifest">
 
   <link rel="preload" href="/assets/font/gi.woff2?v=dev" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/font/vt323-latin.woff2?v=dev" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/site.css?v=dev">
   <script src="/assets/js/site.js?v=dev"></script>
 
@@ -62,6 +63,7 @@
       </ul>
     </nav>
     <div class="view-controls">
+      <button type="button" class="theme-toggle" aria-label="Switch to suit theme">Suit</button>
       <button type="button" class="overview-button" hidden>Overview</button>
       <button type="button" class="view-toggle" hidden>Plain view</button>
     </div>

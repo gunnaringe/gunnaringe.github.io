@@ -19,6 +19,11 @@ build and deploy; this file is the short version for agents.
   only, `html.zoom`) and the **plain view** (normal scrolling page: phones,
   reduced motion, print, or the toggle). Check both after layout changes.
   Card positions for the zoom view are `--x/--y/--r/--s` in `site.css`.
+- Two themes on `<html data-theme>`: `hacker` (default, shipped in the HTML;
+  green CRT look after clock.apphub.casa, VT323 font, scan lines) and `suit`
+  (paper and ink, follows system light/dark). `site.js` applies the stored
+  choice (`localStorage.theme`) before first paint. The name always keeps the
+  handwriting font. Check both themes after style changes.
 - Asset URLs carry `?v=dev`; `build.sh` swaps in the commit hash. Keep the
   suffix on any new asset URL.
 - The email address must never appear literally in HTML; `site.js` builds it.

@@ -1,5 +1,10 @@
 /* gunnaringe.sort.land
  *
+ * Two themes, set by site.js on <html data-theme>: "hacker" (the default; a
+ * green CRT terminal, after clock.apphub.casa) and "suit" (paper and ink,
+ * following the system light/dark setting). The name keeps the handwriting
+ * font in both.
+ *
  * The page is a normal one-column document by default ("plain view").
  * When site.js adds the `zoom` class to <html>, the sections become cards
  * on a large canvas and the camera pans and zooms between them.
@@ -9,6 +14,24 @@
   font-family: "gi";
   src: url("../font/gi.woff2?v=dev") format("woff2");
   font-display: swap;
+}
+
+/* VT323 (SIL OFL, see font/OFL-VT323.txt) for the hacker theme. Its glyphs
+   run small; size-adjust scales them up. */
+@font-face {
+  font-family: "VT323";
+  src: url("../font/vt323-latin-ext.woff2?v=dev") format("woff2");
+  font-display: swap;
+  size-adjust: 135%;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "VT323";
+  src: url("../font/vt323-latin.woff2?v=dev") format("woff2");
+  font-display: swap;
+  size-adjust: 135%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
@@ -24,6 +47,8 @@
   --radius: 18px;
   --hand: "gi", "Segoe Print", "Bradley Hand", cursive;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+  --label: var(--hand); /* nav, buttons and section headings */
+  --portrait-ink: #1f2227;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,6 +60,24 @@
     --accent: #93b0ff;
     --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.6);
   }
+}
+
+/* Wins over both blocks above (higher specificity), whatever the system
+   colour scheme. */
+:root[data-theme="hacker"] {
+  color-scheme: dark;
+  --paper: #000;
+  --card: rgb(0 20 6 / 0.82);
+  --ink: #33ff66;
+  --muted: #1fae48;
+  --accent: #00ff41;
+  --line: rgb(0 255 65 / 0.3);
+  --dot: rgb(0 255 65 / 0.13);
+  --shadow: 0 0 18px -6px rgb(0 255 65 / 0.35);
+  --radius: 2px;
+  --sans: "VT323", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --label: var(--sans);
+  --portrait-ink: #33ff66;
 }
 
 [hidden] {
@@ -50,8 +93,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* Keeps section headings clear of the sticky header when jumping to them. */
-  scroll-padding-top: 5rem;
+  /* Keeps section headings clear of the sticky header when jumping to them.
+     site.js keeps --header-h in step with the header's real height. */
+  scroll-padding-top: calc(var(--header-h, 4rem) + 1rem);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -158,7 +202,7 @@ kbd {
   padding: 0.35rem 0.8rem;
   border-radius: 999px;
   color: var(--ink);
-  font: 1.6rem/1.2 var(--hand);
+  font: 1.6rem/1.2 var(--label);
   text-decoration: none;
 }
 
@@ -217,6 +261,7 @@ kbd {
 }
 
 .frame h2 {
+  font-family: var(--label);
   margin-bottom: 0.75rem;
   font-size: 2.4rem;
   line-height: 1.1;
@@ -240,7 +285,7 @@ kbd {
 .portrait {
   width: 8.5rem;
   aspect-ratio: 480 / 710.7;
-  background: #1f2227;
+  background: var(--portrait-ink);
   -webkit-mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
   mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
 }
@@ -248,7 +293,7 @@ kbd {
 /* The portrait is black line art; in dark mode it sits on a light badge
    rather than being inverted into a negative. */
 @media (prefers-color-scheme: dark) {
-  .portrait-badge {
+  :root:not([data-theme="hacker"]) .portrait-badge {
     padding: 0.9rem 1.1rem 0;
     background: #ebe7de;
     border-radius: 50% 50% 14px 14px / 40% 40% 14px 14px;
@@ -477,13 +522,159 @@ kbd {
     width: 6.5rem;
   }
 
-  .nav-list a {
-    padding: 0.3rem 0.55rem;
-    font-size: 1.35rem;
+  .site-header {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .nav-list {
+    gap: 0;
+  }
+
+  .nav-list a,
+  .view-controls button {
+    padding: 0.3rem 0.45rem;
+    font-size: 1.3rem;
+  }
+}
+
+/* Hacker theme ------------------------------------------------------------ */
+
+/* VT323 has one weight; faux bold smears its pixels. */
+[data-theme="hacker"] body {
+  font-synthesis: none;
+  text-shadow: 0 0 6px rgb(0 255 65 / 0.45);
+}
+
+[data-theme="hacker"] .role {
+  font-weight: 400;
+}
+
+/* CRT scan lines over everything, with a brief flicker every few seconds. */
+[data-theme="hacker"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.18) 0 1px, transparent 1px 3px);
+  animation: crt-flicker 4s infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 95%, 97%, 100% { opacity: 1; }
+  96% { opacity: 0.8; }
+  98% { opacity: 0.85; }
+}
+
+[data-theme="hacker"] :is(.nav-list a, .view-controls button) {
+  font-size: 1.25rem;
+}
+
+[data-theme="hacker"] .frame h2 {
+  font-size: 1.9rem;
+}
+
+@media (max-width: 30rem) {
+  [data-theme="hacker"] :is(.nav-list a, .view-controls button) {
+    font-size: 1rem;
+  }
+
+  [data-theme="hacker"] .frame h2 {
+    font-size: 1.6rem;
+  }
+}
+
+[data-theme="hacker"] .frame h2::before {
+  content: "$ ";
+  color: var(--muted);
+}
+
+/* The name stays handwritten, with a blinking cursor after it. */
+[data-theme="hacker"] .frame-hello h1 {
+  text-shadow: 0 0 10px rgb(0 255 65 / 0.55);
+}
+
+[data-theme="hacker"] .frame-hello h1::after {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 0.8em;
+  margin-left: 0.15em;
+  vertical-align: -0.05em;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Square corners: terminal windows, not bubbles. */
+[data-theme="hacker"] :is(.nav-list a, .view-controls button, .app-shot, kbd) {
+  border-radius: 2px;
+}
+
+[data-theme="hacker"] .nav-list a:hover,
+[data-theme="hacker"] .nav-list a[aria-current="true"] {
+  background: var(--accent);
+  color: #000;
+  text-shadow: none;
+}
+
+[data-theme="hacker"] .site-header {
+  background: rgb(0 0 0 / 0.85);
+}
+
+.zoom[data-theme="hacker"] .site-header {
+  background: none;
+}
+
+[data-theme="hacker"] .links path {
+  stroke: rgb(0 255 65 / 0.45);
+}
+
+/* The apphub.casa screenshot as a green monochrome display: light text on
+   black (inverting the light screenshot), then tinted green. */
+[data-theme="hacker"] .app-shot picture {
+  display: block;
+  position: relative;
+}
+
+[data-theme="hacker"] .app-shot img {
+  filter: invert(1) grayscale(1) contrast(1.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="hacker"] .app-shot img {
+    filter: grayscale(1) contrast(1.2);
+  }
+}
+
+[data-theme="hacker"] .app-shot picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: multiply;
+}
+
+[data-theme="hacker"] .icon {
+  filter: drop-shadow(0 0 4px rgb(0 255 65 / 0.5));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="hacker"] body::after {
+    animation: none;
   }
 }
 
 @media print {
+  [data-theme="hacker"] body::after {
+    display: none;
+  }
+
   .site-header,
   .skip-link {
     display: none;
