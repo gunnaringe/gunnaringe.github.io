@@ -1,0 +1,34 @@
+# Publishes redirect/ to GitHub Pages, so gunnaringe.github.io forwards
+# visitors to https://gunnaringe.sort.land/.
+#
+# Run it by hand (Actions → "Publish GitHub Pages redirect" → Run workflow)
+# once the Cloudflare site is live. Requires Settings → Pages → Source:
+# "GitHub Actions".
+name: Publish GitHub Pages redirect
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: redirect
+      - id: deployment
+        uses: actions/deploy-pages@v4

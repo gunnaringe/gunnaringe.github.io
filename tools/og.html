@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- Source for site/assets/img/og.png (1200×630). Render with tools/render-images.mjs. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Social preview</title>
+<style>
+  @font-face { font-family: gi; src: url(../site/assets/font/gi.woff2); }
+  html, body { margin: 0; }
+  body {
+    width: 1200px; height: 630px; display: grid; place-items: center;
+    background: #f6f3ec radial-gradient(rgb(31 34 39 / 0.14) 1.6px, transparent 2px) 0 0 / 30px 30px;
+    font-family: system-ui, sans-serif; color: #1f2227;
+  }
+  .card {
+    display: flex; align-items: center; gap: 56px; width: 1020px; padding: 64px 72px;
+    background: #fffdf8; border: 2px solid rgb(31 34 39 / 0.18); border-radius: 28px;
+    box-shadow: 0 2px 4px rgb(30 25 15 / 0.06), 0 24px 60px -20px rgb(30 25 15 / 0.3);
+    transform: rotate(-1.5deg);
+  }
+  .portrait { width: 230px; aspect-ratio: 480 / 710.7; background: #1f2227;
+    mask: url(../site/assets/img/portrait.svg) center / contain no-repeat; flex: none; }
+  h1 { margin: 0; font: 400 76px/1.05 gi, cursive; }
+  p { margin: 18px 0 0; font-size: 32px; font-weight: 600; }
+  .meta { margin-top: 8px; font-weight: 400; color: #5d636e; font-size: 28px; }
+  .url { margin-top: 26px; font-size: 24px; font-weight: 400; color: #2c55c9; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="portrait"></div>
+    <div>
+      <h1>Gunnar Inge Gjøvik Sortland</h1>
+      <p>Software Engineer Technical Leader</p>
+      <p class="meta">Cisco, Provider Mobility · Melhus, Norway</p>
+      <p class="url">gunnaringe.sort.land</p>
+    </div>
+  </div>
+</body>
+</html>

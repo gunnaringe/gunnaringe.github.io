@@ -1,0 +1,438 @@
+/* gunnaringe.sort.land
+ *
+ * The page is a normal one-column document by default ("plain view").
+ * When site.js adds the `zoom` class to <html>, the sections become cards
+ * on a large canvas and the camera pans and zooms between them.
+ */
+
+@font-face {
+  font-family: "gi";
+  src: url("../font/gi.woff2?v=dev") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+  --paper: #f6f3ec;
+  --card: #fffdf8;
+  --ink: #1f2227;
+  --muted: #5d636e;
+  --accent: #2c55c9;
+  --line: color-mix(in oklab, var(--ink) 18%, transparent);
+  --dot: color-mix(in oklab, var(--ink) 14%, transparent);
+  --shadow: 0 1px 2px rgb(30 25 15 / 0.06), 0 10px 30px -12px rgb(30 25 15 / 0.22);
+  --radius: 18px;
+  --hand: "gi", "Segoe Print", "Bradley Hand", cursive;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #16181d;
+    --card: #1f2229;
+    --ink: #ebe7de;
+    --muted: #a3a8b3;
+    --accent: #93b0ff;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 clamp(1rem, 0.95rem + 0.25vw, 1.125rem) / 1.6 var(--sans);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+kbd {
+  font: inherit;
+  font-size: 0.85em;
+  padding: 0.05em 0.4em;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+}
+
+.hand {
+  font-family: var(--hand);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -6rem;
+  z-index: 10;
+  padding: 0.5rem 0.9rem;
+  background: var(--card);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Header and footer ------------------------------------------------------ */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.nav-list {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list a,
+.view-controls button {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  color: var(--ink);
+  font: 1.6rem/1.2 var(--hand);
+  text-decoration: none;
+}
+
+.nav-list a:hover,
+.nav-list a[aria-current="true"] {
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
+}
+
+.view-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.view-controls button {
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+}
+
+.view-controls button:hover {
+  border-color: var(--accent);
+}
+
+.site-footer {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.site-footer .hint {
+  display: none;
+}
+
+/* Cards (both views) ----------------------------------------------------- */
+
+.canvas {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.links {
+  display: none;
+}
+
+.frame {
+  scroll-margin-top: 1rem;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.frame h2 {
+  margin-bottom: 0.75rem;
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+
+.frame p + p {
+  margin-top: 0.9rem;
+}
+
+.frame-hello {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2rem;
+}
+
+.portrait-badge {
+  flex: none;
+}
+
+.portrait {
+  width: 8.5rem;
+  aspect-ratio: 480 / 710.7;
+  background: #1f2227;
+  -webkit-mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
+  mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
+}
+
+/* The portrait is black line art; in dark mode it sits on a light badge
+   rather than being inverted into a negative. */
+@media (prefers-color-scheme: dark) {
+  .portrait-badge {
+    padding: 0.9rem 1.1rem 0;
+    background: #ebe7de;
+    border-radius: 50% 50% 14px 14px / 40% 40% 14px 14px;
+  }
+}
+
+.hello-text {
+  flex: 1 1 16rem;
+}
+
+.frame-hello h1 {
+  font-size: clamp(2.4rem, 1.8rem + 2.5vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.role {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.meta {
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+
+.links-list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.1rem;
+}
+
+.icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  flex: none;
+  color: var(--ink);
+}
+
+/* Zoom view -------------------------------------------------------------- */
+
+@media screen {
+  .zoom,
+  .zoom body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .zoom .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 2;
+    max-width: none;
+    padding: 1rem 1.5rem;
+    pointer-events: none;
+  }
+
+  .zoom .site-header > * {
+    pointer-events: auto;
+  }
+
+  .zoom .site-footer {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: none;
+    padding: 1rem 1.5rem;
+    pointer-events: none;
+  }
+
+  .zoom .site-footer .hint {
+    display: block;
+  }
+
+  .zoom .viewport {
+    position: fixed;
+    inset: 0;
+    overflow: clip;
+    touch-action: pinch-zoom;
+    background-image: radial-gradient(var(--dot) 1.2px, transparent 1.6px);
+    background-size: 26px 26px;
+  }
+
+  .zoom .canvas {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    transform-origin: 0 0;
+    opacity: 0;
+  }
+
+  .zoom.ready .canvas {
+    opacity: 1;
+    transition: opacity 0.4s;
+  }
+
+  .zoom .links {
+    display: block;
+    position: absolute;
+    overflow: visible;
+    width: 1px;
+    height: 1px;
+  }
+
+  .zoom .links path {
+    fill: none;
+    stroke: color-mix(in oklab, var(--ink) 35%, transparent);
+    stroke-width: 2.5;
+    stroke-dasharray: 2 9;
+    stroke-linecap: round;
+  }
+
+  .zoom .frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36rem;
+    transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--r)) scale(var(--s));
+    transition: opacity 0.6s;
+    cursor: zoom-in;
+  }
+
+  .zoom .frame.is-active {
+    cursor: auto;
+  }
+
+  .zoom.has-active .frame:not(.is-active) {
+    opacity: 0.35;
+  }
+
+  .zoom .frame-hello {
+    --x: 0px;
+    --y: 0px;
+    --r: -1.5deg;
+    --s: 1;
+    width: 41rem;
+  }
+
+  .zoom .frame-about {
+    --x: 790px;
+    --y: -20px;
+    --r: 2.5deg;
+    --s: 0.72;
+  }
+
+  .zoom .frame-contact {
+    --x: 300px;
+    --y: 440px;
+    --r: -3deg;
+    --s: 0.68;
+    width: 28rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .portrait {
+    width: 6.5rem;
+  }
+}
+
+@media print {
+  .site-header,
+  .skip-link {
+    display: none;
+  }
+
+  .frame {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+
+/* 404 page --------------------------------------------------------------- */
+
+.not-found {
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-content: center;
+}
+
+.not-found h1 {
+  margin-bottom: 0.75rem;
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
