@@ -21,7 +21,7 @@ build and deploy; this file is the short version for agents.
   Card positions for the zoom view are `--x/--y/--r/--s` in `site.css`.
 - Two themes on `<html data-theme>`: `hacker` (default, shipped in the HTML;
   green CRT look after clock.apphub.casa, VT323 font, scan lines) and `suit`
-  (paper and ink, follows system light/dark). `site.js` applies the stored
+  (paper and ink, Source Serif 4 body text, follows system light/dark). `site.js` applies the stored
   choice (`localStorage.theme`) before first paint. The name always keeps the
   handwriting font. Check both themes after style changes.
 - Asset URLs carry `?v=dev`; `build.sh` swaps in the commit hash. Keep the
