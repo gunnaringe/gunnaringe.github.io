@@ -65,8 +65,10 @@
 
     const show = () => {
       const hacker = root.dataset.theme === "hacker";
-      button.textContent = hacker ? "Suit" : "Hacker";
-      button.setAttribute("aria-label", hacker ? "Switch to suit theme" : "Switch to hacker theme");
+      const label = hacker ? "Switch to suit theme" : "Switch to hacker theme";
+      button.textContent = hacker ? "💼" : "💾";
+      button.setAttribute("aria-label", label);
+      button.title = label;
       for (const meta of metas) meta.content = hacker ? "#000000" : meta.dataset.suit;
     };
 

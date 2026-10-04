@@ -222,6 +222,14 @@ kbd {
   cursor: pointer;
 }
 
+/* Emoji: no handwriting/terminal font, no glow. */
+.view-controls .theme-toggle {
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  line-height: 1.55;
+  text-shadow: none;
+}
+
 .view-controls button:hover {
   border-color: var(--accent);
 }
