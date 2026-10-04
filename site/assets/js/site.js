@@ -314,11 +314,35 @@
         canvas.style.transform = "";
         canvas.style.willChange = "";
         for (const f of frames) f.classList.remove("is-active");
-        for (const link of navLinks) link.removeAttribute("aria-current");
         overviewButton.hidden = true;
         frameFromHash()?.scrollIntoView();
+        markSectionInView();
       }
     }
+
+    const markCurrent = (frame) => {
+      for (const link of navLinks) {
+        if (link.hash === `#${frame.id}`) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      }
+    };
+
+    // Plain view: the menu marks the section at the top of the screen, just
+    // under the sticky header (Hello at the start, the last one at the end).
+    function markSectionInView() {
+      if (enabled) return;
+      const line = (parseFloat(getComputedStyle(root).getPropertyValue("--header-h")) || 64) + 32;
+      const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+      let frame = frames[0];
+      for (const f of frames) if (f.getBoundingClientRect().top <= line) frame = f;
+      markCurrent(atBottom ? frames[frames.length - 1] : frame);
+    }
+
+    let scrollFrame = 0;
+    addEventListener("scroll", () => {
+      cancelAnimationFrame(scrollFrame);
+      scrollFrame = requestAnimationFrame(markSectionInView);
+    }, { passive: true });
 
     // In-page links (nav, skip link) move the camera instead of scrolling.
     document.addEventListener("click", (event) => {
