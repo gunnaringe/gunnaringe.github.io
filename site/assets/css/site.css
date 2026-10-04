@@ -277,11 +277,11 @@ kbd {
 .portrait-badge {
   flex: none;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   width: 10rem;
   height: 10rem;
-  padding-top: 0.7rem;
+  padding: 0.8rem;
   background: var(--accent);
   box-shadow: 0 0 24px -2px rgb(0 255 65 / 0.6);
 }
