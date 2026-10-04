@@ -1,9 +1,7 @@
 /* gunnaringe.sort.land
  *
- * Two themes, set by site.js on <html data-theme>: "hacker" (the default; a
- * green CRT terminal, after clock.apphub.casa) and "suit" (paper and ink,
- * following the system light/dark setting). The name keeps the handwriting
- * font in both.
+ * A green CRT terminal look, after the hacker theme of clock.apphub.casa:
+ * VT323 everywhere, except the name, which is in the handwriting font.
  *
  * The page is a normal one-column document by default ("plain view").
  * When site.js adds the `zoom` class to <html>, the sections become cards
@@ -16,26 +14,8 @@
   font-display: swap;
 }
 
-/* Source Serif 4 (SIL OFL, see font/OFL-SourceSerif4.txt), variable weight,
-   for body text in the suit theme. */
-@font-face {
-  font-family: "Source Serif 4";
-  src: url("../font/source-serif-4-latin-ext.woff2?v=dev") format("woff2");
-  font-display: swap;
-  font-weight: 200 900;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Source Serif 4";
-  src: url("../font/source-serif-4-latin.woff2?v=dev") format("woff2");
-  font-display: swap;
-  font-weight: 200 900;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-/* VT323 (SIL OFL, see font/OFL-VT323.txt) for the hacker theme. Its glyphs
-   run small; size-adjust scales them up. */
+/* VT323 (SIL OFL, see font/OFL-VT323.txt). Its glyphs run small; size-adjust
+   scales them up. */
 @font-face {
   font-family: "VT323";
   src: url("../font/vt323-latin-ext.woff2?v=dev") format("woff2");
@@ -53,36 +33,6 @@
 }
 
 :root {
-  color-scheme: light dark;
-  --paper: #f6f3ec;
-  --card: #fffdf8;
-  --ink: #1f2227;
-  --muted: #5d636e;
-  --accent: #2c55c9;
-  --line: color-mix(in oklab, var(--ink) 18%, transparent);
-  --dot: color-mix(in oklab, var(--ink) 14%, transparent);
-  --shadow: 0 1px 2px rgb(30 25 15 / 0.06), 0 10px 30px -12px rgb(30 25 15 / 0.22);
-  --radius: 18px;
-  --hand: "gi", "Segoe Print", "Bradley Hand", cursive;
-  --text: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --label: var(--hand); /* nav, buttons and section headings */
-  --portrait-ink: #1f2227;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #16181d;
-    --card: #1f2229;
-    --ink: #ebe7de;
-    --muted: #a3a8b3;
-    --accent: #93b0ff;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.6);
-  }
-}
-
-/* Wins over both blocks above (higher specificity), whatever the system
-   colour scheme. */
-:root[data-theme="hacker"] {
   color-scheme: dark;
   --paper: #000;
   --card: rgb(0 20 6 / 0.82);
@@ -91,11 +41,11 @@
   --accent: #00ff41;
   --line: rgb(0 255 65 / 0.3);
   --dot: rgb(0 255 65 / 0.13);
+  --glow: 0 0 6px rgb(0 255 65 / 0.45);
   --shadow: 0 0 18px -6px rgb(0 255 65 / 0.35);
   --radius: 2px;
+  --hand: "gi", "Segoe Print", "Bradley Hand", cursive;
   --text: "VT323", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-  --label: var(--text);
-  --portrait-ink: #33ff66;
 }
 
 [hidden] {
@@ -122,11 +72,35 @@ html {
   }
 }
 
+/* VT323 has one weight; faux bold smears its pixels. */
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
   font: 400 clamp(1rem, 0.95rem + 0.25vw, 1.125rem) / 1.6 var(--text);
+  font-synthesis: none;
+  text-shadow: var(--glow);
+}
+
+/* CRT scan lines over everything, with a brief flicker every few seconds. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.18) 0 1px, transparent 1px 3px);
+  animation: crt-flicker 4s infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 95%, 97%, 100% { opacity: 1; }
+  96% { opacity: 0.8; }
+  98% { opacity: 0.85; }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
 h1,
@@ -140,23 +114,23 @@ a {
   text-decoration: none;
 }
 
-/* Links in running text: no underline, but bolder and sitting on a soft
-   highlighter stripe that fills in on hover. */
+/* Links in running text: no underline; a faint stripe underneath, and the
+   whole link lights up like a terminal selection on hover. */
 .frame p a {
-  font-weight: 600;
-  background: linear-gradient(color-mix(in oklab, var(--accent) 16%, transparent) 0 0) no-repeat 0 100% / 100% 0.32em;
+  background: linear-gradient(rgb(0 255 65 / 0.16) 0 0) no-repeat 0 100% / 100% 0.32em;
   border-radius: 2px;
-  transition: background-size 0.2s;
 }
 
 .frame p a:hover {
-  background-size: 100% 100%;
+  background: var(--accent);
+  color: #000;
+  text-shadow: none;
 }
 
 :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 [tabindex="-1"]:focus {
@@ -169,13 +143,7 @@ kbd {
   padding: 0.05em 0.4em;
   border: 1px solid var(--line);
   border-bottom-width: 2px;
-  border-radius: 5px;
-}
-
-.hand {
-  font-family: var(--hand);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  border-radius: 2px;
 }
 
 .skip-link {
@@ -185,8 +153,7 @@ kbd {
   z-index: 10;
   padding: 0.5rem 0.9rem;
   background: var(--card);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
 }
 
 .skip-link:focus {
@@ -208,7 +175,7 @@ kbd {
   gap: 0.5rem 1rem;
   margin-bottom: 0.5rem;
   padding: 0.6rem max(1rem, (100% - 42rem) / 2);
-  background: color-mix(in oklab, var(--paper) 88%, transparent);
+  background: rgb(0 0 0 / 0.85);
   border-bottom: 1px solid var(--line);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -226,34 +193,23 @@ kbd {
 .view-controls button {
   display: inline-block;
   padding: 0.35rem 0.8rem;
-  border-radius: 999px;
+  border-radius: 2px;
   color: var(--ink);
-  font: 1.6rem/1.2 var(--label);
+  font: 1.25rem/1.2 var(--text);
   text-decoration: none;
 }
 
 .nav-list a:hover,
 .nav-list a[aria-current="true"] {
-  background: color-mix(in oklab, var(--accent) 14%, transparent);
-}
-
-.view-controls {
-  display: flex;
-  gap: 0.25rem;
+  background: var(--accent);
+  color: #000;
+  text-shadow: none;
 }
 
 .view-controls button {
   border: 1px solid var(--line);
   background: transparent;
   cursor: pointer;
-}
-
-/* Emoji: no handwriting/terminal font, no glow. */
-.view-controls .theme-toggle {
-  font-family: var(--text);
-  font-size: 1.25rem;
-  line-height: 1.55;
-  text-shadow: none;
 }
 
 .view-controls button:hover {
@@ -295,10 +251,15 @@ kbd {
 }
 
 .frame h2 {
-  font-family: var(--label);
   margin-bottom: 0.75rem;
-  font-size: 2.4rem;
+  font-size: 1.9rem;
+  font-weight: 400;
   line-height: 1.1;
+}
+
+.frame h2::before {
+  content: "$ ";
+  color: var(--muted);
 }
 
 .frame p + p {
@@ -312,40 +273,57 @@ kbd {
   gap: 1.25rem 2rem;
 }
 
+/* The portrait is dark line art, kept as drawn, on a light badge with a
+   phosphor glow. */
 .portrait-badge {
   flex: none;
+  padding: 0.9rem 1.1rem 0;
+  background: #dcf7e2;
+  border-radius: 50% 50% 4px 4px / 40% 40% 4px 4px;
+  box-shadow: 0 0 22px -4px rgb(0 255 65 / 0.55);
 }
 
 .portrait {
   width: 8.5rem;
   aspect-ratio: 480 / 710.7;
-  background: var(--portrait-ink);
+  background: #1f2227;
   -webkit-mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
   mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
 }
 
-/* The portrait is black line art; in dark mode it sits on a light badge
-   rather than being inverted into a negative. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="hacker"]) .portrait-badge {
-    padding: 0.9rem 1.1rem 0;
-    background: #ebe7de;
-    border-radius: 50% 50% 14px 14px / 40% 40% 14px 14px;
-  }
-}
-
+/* The name is sized from the width of its column (cqi), so it always fits
+   on one line. The name plus cursor is about 9 em wide. */
 .hello-text {
   flex: 1 1 16rem;
+  min-width: 0;
+  container-type: inline-size;
 }
 
-.frame-hello h1 {
-  font-size: clamp(2.4rem, 1.8rem + 2.5vw, 3.4rem);
+.name {
+  font-family: var(--hand);
+  font-size: min(3.4rem, 100cqi / 9.2);
+  font-weight: 400;
   line-height: 1.05;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgb(0 255 65 / 0.55);
+}
+
+/* A blinking cursor after the name. */
+.name::after {
+  content: "";
+  display: inline-block;
+  width: 0.45em;
+  height: 0.8em;
+  margin-left: 0.15em;
+  vertical-align: -0.05em;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: blink 1s steps(1) infinite;
 }
 
 .role {
   margin-top: 0.75rem;
-  font-weight: 600;
 }
 
 .meta {
@@ -359,7 +337,7 @@ kbd {
   margin-top: 1.25rem;
   overflow: hidden;
   border: 1.5px solid var(--line);
-  border-radius: 12px;
+  border-radius: 2px;
   background: var(--paper);
 }
 
@@ -388,10 +366,32 @@ kbd {
   font-size: 0.8rem;
 }
 
+/* The apphub.casa screenshot as a green monochrome display: light text on
+   black (inverting the light screenshot), then tinted green. */
+.app-shot picture {
+  display: block;
+  position: relative;
+}
+
+.app-shot picture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  mix-blend-mode: multiply;
+}
+
 .app-shot img {
   display: block;
   width: 100%;
   height: auto;
+  filter: invert(1) grayscale(1) contrast(1.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-shot img {
+    filter: grayscale(1) contrast(1.2);
+  }
 }
 
 .links-list {
@@ -402,24 +402,22 @@ kbd {
   list-style: none;
 }
 
-/* Contact links as buttons: icon, label, and an arrow that slides in on hover. */
+/* Contact links as buttons: icon, label, and a ">" that slides in on hover. */
 .links-list a {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 0.95rem;
   border: 1.5px solid var(--line);
-  border-radius: 12px;
-  background: var(--paper);
+  border-radius: 2px;
   color: var(--ink);
   font-size: 1.1rem;
-  transition: border-color 0.2s, transform 0.2s, background-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 
 .links-list a::after {
-  content: "→";
+  content: ">";
   margin-left: auto;
-  color: var(--accent);
   opacity: 0;
   transform: translateX(-0.4rem);
   transition: opacity 0.2s, transform 0.2s;
@@ -427,8 +425,9 @@ kbd {
 
 .links-list a:hover {
   border-color: var(--accent);
-  background: color-mix(in oklab, var(--accent) 8%, var(--paper));
-  transform: translateY(-1px);
+  background: var(--accent);
+  color: #000;
+  text-shadow: none;
 }
 
 .links-list a:hover::after {
@@ -441,6 +440,12 @@ kbd {
   height: 1.4rem;
   flex: none;
   color: var(--accent);
+  filter: drop-shadow(0 0 4px rgb(0 255 65 / 0.5));
+}
+
+.links-list a:hover .icon {
+  color: #000;
+  filter: none;
 }
 
 /* Zoom view -------------------------------------------------------------- */
@@ -523,7 +528,7 @@ kbd {
 
   .zoom .links path {
     fill: none;
-    stroke: color-mix(in oklab, var(--ink) 35%, transparent);
+    stroke: rgb(0 255 65 / 0.45);
     stroke-width: 2.5;
     stroke-dasharray: 2 9;
     stroke-linecap: round;
@@ -595,169 +600,19 @@ kbd {
   .nav-list a,
   .view-controls button {
     padding: 0.3rem 0.45rem;
-    font-size: 1.3rem;
-  }
-}
-
-/* Hacker theme ------------------------------------------------------------ */
-
-/* VT323 has one weight; faux bold smears its pixels. */
-[data-theme="hacker"] body {
-  font-synthesis: none;
-  text-shadow: 0 0 6px rgb(0 255 65 / 0.45);
-}
-
-[data-theme="hacker"] .role {
-  font-weight: 400;
-}
-
-/* CRT scan lines over everything, with a brief flicker every few seconds. */
-[data-theme="hacker"] body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.18) 0 1px, transparent 1px 3px);
-  animation: crt-flicker 4s infinite;
-}
-
-@keyframes crt-flicker {
-  0%, 95%, 97%, 100% { opacity: 1; }
-  96% { opacity: 0.8; }
-  98% { opacity: 0.85; }
-}
-
-[data-theme="hacker"] :is(.nav-list a, .view-controls button) {
-  font-size: 1.25rem;
-}
-
-[data-theme="hacker"] .frame h2 {
-  font-size: 1.9rem;
-}
-
-@media (max-width: 30rem) {
-  [data-theme="hacker"] :is(.nav-list a, .view-controls button) {
     font-size: 1rem;
   }
 
-  [data-theme="hacker"] .frame h2 {
+  .frame h2 {
     font-size: 1.6rem;
   }
 }
 
-[data-theme="hacker"] .frame h2::before {
-  content: "$ ";
-  color: var(--muted);
-}
-
-/* The name stays handwritten, with a blinking cursor after it. */
-[data-theme="hacker"] .frame-hello h1 {
-  text-shadow: 0 0 10px rgb(0 255 65 / 0.55);
-}
-
-[data-theme="hacker"] .frame-hello h1::after {
-  content: "";
-  display: inline-block;
-  width: 0.45em;
-  height: 0.8em;
-  margin-left: 0.15em;
-  vertical-align: -0.05em;
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
-  animation: blink 1s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* Square corners: terminal windows, not bubbles. */
-[data-theme="hacker"] :is(.nav-list a, .view-controls button, .app-shot, kbd) {
-  border-radius: 2px;
-}
-
-[data-theme="hacker"] .nav-list a:hover,
-[data-theme="hacker"] .nav-list a[aria-current="true"] {
-  background: var(--accent);
-  color: #000;
-  text-shadow: none;
-}
-
-[data-theme="hacker"] .site-header {
-  background: rgb(0 0 0 / 0.85);
-}
-
-.zoom[data-theme="hacker"] .site-header {
-  background: none;
-}
-
-[data-theme="hacker"] .links path {
-  stroke: rgb(0 255 65 / 0.45);
-}
-
-/* The apphub.casa screenshot as a green monochrome display: light text on
-   black (inverting the light screenshot), then tinted green. */
-[data-theme="hacker"] .app-shot picture {
-  display: block;
-  position: relative;
-}
-
-[data-theme="hacker"] .app-shot img {
-  filter: invert(1) grayscale(1) contrast(1.2);
-}
-
-@media (prefers-color-scheme: dark) {
-  [data-theme="hacker"] .app-shot img {
-    filter: grayscale(1) contrast(1.2);
-  }
-}
-
-[data-theme="hacker"] .app-shot picture::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  mix-blend-mode: multiply;
-}
-
-/* Hovered links light up like a terminal selection. */
-[data-theme="hacker"] .frame p a {
-  font-weight: 400;
-}
-
-[data-theme="hacker"] .frame p a:hover,
-[data-theme="hacker"] .links-list a:hover {
-  background: var(--accent);
-  color: #000;
-  text-shadow: none;
-}
-
-[data-theme="hacker"] .links-list a {
-  border-radius: 2px;
-  background: transparent;
-}
-
-[data-theme="hacker"] .links-list a::after {
-  content: ">";
-  color: inherit;
-}
-
-[data-theme="hacker"] .links-list a:hover .icon {
-  color: #000;
-  filter: none;
-}
-
-[data-theme="hacker"] .icon {
-  filter: drop-shadow(0 0 4px rgb(0 255 65 / 0.5));
-}
-
 @media (prefers-reduced-motion: reduce) {
-  [data-theme="hacker"] body::after {
+  body::after {
     animation: none;
   }
 
-  .frame p a,
   .links-list a,
   .links-list a::after {
     transition: none;
@@ -765,10 +620,7 @@ kbd {
 }
 
 @media print {
-  [data-theme="hacker"] body::after {
-    display: none;
-  }
-
+  body::after,
   .site-header,
   .skip-link {
     display: none;
@@ -790,6 +642,7 @@ kbd {
 
 .not-found h1 {
   margin-bottom: 0.75rem;
-  font-size: 2.6rem;
+  font-size: 2.2rem;
+  font-weight: 400;
   line-height: 1.1;
 }

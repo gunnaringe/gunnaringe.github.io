@@ -1,19 +1,17 @@
 // gunnaringe.sort.land
 //
-// Loaded synchronously in <head> so the `zoom` class and the theme are on
-// <html> before the first paint. Everything else waits for DOMContentLoaded.
-//
-// Themes: "hacker" (default, also what the HTML ships with) and "suit". The
-// choice is kept in localStorage under "theme".
+// Loaded synchronously in <head> so the `zoom` class is on <html> before the
+// first paint. Everything else waits for DOMContentLoaded.
 //
 // Zoom view: the sections are cards on a large canvas (positions live in
 // site.css as --x/--y/--r/--s). A camera { x, y, w, r } describes what is on
 // screen: the canvas point at the centre of the viewport, the viewport width in
 // canvas units, and the rotation. Moving between cards animates the camera
 // along a smooth zoom path (van Wijk & Nuij, the same curve d3-zoom uses).
+// The page opens on the Hello card; the overview has the address #overview.
 //
 // Plain view: a normal scrolling page. Used without JavaScript, on small
-// screens, when reduced motion is requested, when printing, or by choice.
+// screens, when reduced motion is requested, and when printing.
 
 (() => {
   "use strict";
@@ -23,65 +21,21 @@
     "screen and (prefers-reduced-motion: no-preference) and (min-width: 60em) and (min-height: 32em)",
   );
 
-  const read = (key) => {
-    try {
-      return localStorage.getItem(key);
-    } catch {
-      return null;
-    }
-  };
-  const write = (key, value) => {
-    try {
-      localStorage.setItem(key, value);
-    } catch {
-      // Storage can be unavailable (private mode, blocked site data). The
-      // toggles still work for this visit.
-    }
-  };
-  const wantsZoom = () => capable.matches && read("view") !== "plain";
-
-  root.classList.toggle("zoom", wantsZoom());
-  root.dataset.theme = read("theme") === "suit" ? "suit" : "hacker";
+  root.classList.toggle("zoom", capable.matches);
 
   document.addEventListener("DOMContentLoaded", () => {
     setUpEmail();
-    setUpTheme();
     setUpHeaderOffset();
     setUpZoom();
   });
 
-  // The header is sticky in plain view; its height (which depends on font and
-  // theme) feeds scroll-padding-top in site.css.
+  // The header is sticky in plain view; its height feeds scroll-padding-top
+  // in site.css.
   function setUpHeaderOffset() {
     const header = document.querySelector(".site-header");
     new ResizeObserver(() => {
       root.style.setProperty("--header-h", `${header.offsetHeight}px`);
     }).observe(header);
-  }
-
-  function setUpTheme() {
-    const button = document.querySelector(".theme-toggle");
-    const metas = [...document.querySelectorAll("meta[name=theme-color][data-suit]")];
-
-    const show = () => {
-      const hacker = root.dataset.theme === "hacker";
-      const label = hacker ? "Switch to suit theme" : "Switch to hacker theme";
-      button.textContent = hacker ? "💼" : "💾";
-      button.setAttribute("aria-label", label);
-      button.title = label;
-      for (const meta of metas) meta.content = hacker ? "#000000" : meta.dataset.suit;
-    };
-
-    button.addEventListener("click", () => {
-      root.dataset.theme = root.dataset.theme === "hacker" ? "suit" : "hacker";
-      write("theme", root.dataset.theme);
-      show();
-      // Card sizes change with the font; let the zoom view re-fit once the
-      // new font has loaded.
-      document.fonts.ready.then(() => dispatchEvent(new Event("resize")));
-    });
-
-    show();
   }
 
   // The address is assembled here so it never appears in the HTML source.
@@ -100,7 +54,6 @@
     const frames = [...document.querySelectorAll(".frame")];
     const navLinks = [...document.querySelectorAll(".nav-list a")];
     const overviewButton = document.querySelector(".overview-button");
-    const toggle = document.querySelector(".view-toggle");
 
     const MAX_TEXT_SCALE = 1.25; // never magnify text more than this
     const CHROME = 180; // vertical room kept free for header and footer
@@ -118,6 +71,9 @@
         return null; // malformed escape in the URL
       }
     };
+    // The card the address points at: #overview is the overview, and any
+    // other address (including none) that isn't a card opens on Hello.
+    const frameForUrl = () => (location.hash === "#overview" ? null : (frameFromHash() ?? frames[0]));
 
     function geometry(frame) {
       const style = getComputedStyle(frame);
@@ -245,7 +201,7 @@
       overviewButton.hidden = !frame;
 
       if (changed && mode !== "none") {
-        const url = frame ? `#${frame.id}` : location.pathname + location.search;
+        const url = `#${frame ? frame.id : "overview"}`;
         if (mode === "push") history.pushState(null, "", url);
         else history.replaceState(null, "", url);
       }
@@ -276,14 +232,12 @@
     function setEnabled(on) {
       enabled = on;
       root.classList.toggle("zoom", on);
-      toggle.hidden = !capable.matches;
-      toggle.textContent = on ? "Plain view" : "Zoom view";
 
       if (on) {
         camera = null;
         current = undefined;
         drawLinks();
-        go(frameFromHash(), { history: "none", instant: true });
+        go(frameForUrl(), { history: "none", instant: true });
         requestAnimationFrame(() => root.classList.add("ready"));
       } else {
         cancelAnimationFrame(animation);
@@ -318,11 +272,6 @@
     });
 
     overviewButton.addEventListener("click", () => go(null));
-
-    toggle.addEventListener("click", () => {
-      write("view", enabled ? "plain" : "zoom");
-      setEnabled(!enabled);
-    });
 
     document.addEventListener("keydown", (event) => {
       if (!enabled || event.altKey || event.ctrlKey || event.metaKey) return;
@@ -383,7 +332,7 @@
     });
 
     addEventListener("popstate", () => {
-      if (enabled) go(frameFromHash(), { history: "none" });
+      if (enabled) go(frameForUrl(), { history: "none" });
     });
 
     const relayout = () => {
@@ -394,8 +343,8 @@
     addEventListener("resize", relayout);
     document.fonts?.ready.then(relayout);
 
-    capable.addEventListener("change", () => setEnabled(wantsZoom()));
+    capable.addEventListener("change", () => setEnabled(capable.matches));
 
-    setEnabled(wantsZoom());
+    setEnabled(capable.matches);
   }
 })();

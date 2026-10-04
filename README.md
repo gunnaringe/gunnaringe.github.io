@@ -11,11 +11,9 @@ nothing loaded from third parties.
   the camera pans and zooms between them (`site/assets/js/site.js`). Card
   positions live in `site/assets/css/site.css` as `--x`, `--y`, `--r`, and `--s`.
 - **Plain view.** A normal scrolling page. Used without JavaScript, on small
-  screens, when reduced motion is requested, when printing, or when the visitor
-  picks it with the toggle.
-- **Themes.** A header button switches between "hacker" (the default: green
-  terminal with scan lines, after clock.apphub.casa) and "suit" (paper and
-  ink, following the system light/dark setting). The choice is remembered.
+  screens, when reduced motion is requested, and when printing.
+- **Look.** A green CRT terminal (VT323, scan lines), after the hacker theme
+  of clock.apphub.casa. Only the name is in the handwriting font.
 - **Email.** The address is assembled by JavaScript so it never appears in the
   HTML source. Without JavaScript it reads `gunnar.inge [at] sort.land`.
 
@@ -26,7 +24,7 @@ site/            what gets published
   index.html     the page
   404.html
   _headers       security and cache headers (Cloudflare)
-  assets/        css, js, font (handwriting, WOFF2), img (portrait, icons, og.png)
+  assets/        css, js, font (handwriting and VT323, WOFF2), img (portrait, icons, og.png)
   .well-known/keybase.txt
 redirect/        the page GitHub Pages serves, forwarding to gunnaringe.sort.land
 tools/           og.png/icon sources and the apphub.casa screenshot script
