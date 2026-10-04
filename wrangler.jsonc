@@ -1,0 +1,18 @@
+// Cloudflare Workers (static assets only, no Worker script).
+// Importing this repository in Workers & Pages picks this file up:
+// `npx wrangler deploy` runs build.sh, uploads dist/, and attaches the
+// custom domain (creating its DNS record and certificate).
+{
+  "name": "gunnaringe",
+  "compatibility_date": "2026-10-01",
+  "build": {
+    "command": "./build.sh"
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "gunnaringe.sort.land", "custom_domain": true }
+  ]
+}
