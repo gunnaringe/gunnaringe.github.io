@@ -22,8 +22,12 @@ build and deploy; this file is the short version for agents.
   Card positions for the zoom view are `--x/--y/--r/--s` in `site.css`.
 - One look only: green CRT terminal after clock.apphub.casa (VT323, glow,
   scan lines). The handwriting font (`gi`) is used for the name and nothing
-  else; the name must stay on one line (sized with `cqi` in `.name`). The
-  portrait stays dark line art on a light badge.
+  else; the name must stay on one line (sized with `cqi` and `--chars` in
+  `.name`). The portrait is drawn in the page black on a square of the
+  accent green.
+- The name is editable like a terminal prompt (`setUpName` in `site.js`):
+  caret pinned to the end under the block cursor, max 40 characters, not
+  saved. Arrow keys, PageUp/PageDown and Esc still navigate cards from it.
 - Asset URLs carry `?v=dev`; `build.sh` swaps in the commit hash. Keep the
   suffix on any new asset URL.
 - The email address must never appear literally in HTML; `site.js` builds it.

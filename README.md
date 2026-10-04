@@ -14,6 +14,8 @@ nothing loaded from third parties.
   screens, when reduced motion is requested, and when printing.
 - **Look.** A green CRT terminal (VT323, scan lines), after the hacker theme
   of clock.apphub.casa. Only the name is in the handwriting font.
+- **Editable name.** The name has a blinking block cursor and can be deleted
+  and retyped, like a terminal prompt. It's just for fun and isn't saved.
 - **Email.** The address is assembled by JavaScript so it never appears in the
   HTML source. Without JavaScript it reads `gunnar.inge [at] sort.land`.
 

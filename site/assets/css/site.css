@@ -273,26 +273,30 @@ kbd {
   gap: 1.25rem 2rem;
 }
 
-/* The portrait is dark line art, kept as drawn, on a light badge with a
-   phosphor glow. */
+/* The portrait on a square of phosphor green, drawn in the page's black. */
 .portrait-badge {
   flex: none;
-  padding: 0.9rem 1.1rem 0;
-  background: #dcf7e2;
-  border-radius: 50% 50% 4px 4px / 40% 40% 4px 4px;
-  box-shadow: 0 0 22px -4px rgb(0 255 65 / 0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 10rem;
+  height: 10rem;
+  padding-top: 0.7rem;
+  background: var(--accent);
+  box-shadow: 0 0 24px -2px rgb(0 255 65 / 0.6);
 }
 
 .portrait {
-  width: 8.5rem;
+  height: 100%;
   aspect-ratio: 480 / 710.7;
-  background: #1f2227;
+  background: var(--paper);
   -webkit-mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
   mask: url("../img/portrait.svg?v=dev") center / contain no-repeat;
 }
 
 /* The name is sized from the width of its column (cqi), so it always fits
-   on one line. The name plus cursor is about 9 em wide. */
+   on one line: about 0.33 em per character plus the cursor. site.js sets
+   --chars when the name is edited (never below the real name's 27). */
 .hello-text {
   flex: 1 1 16rem;
   min-width: 0;
@@ -301,12 +305,14 @@ kbd {
 
 .name {
   font-family: var(--hand);
-  font-size: min(3.4rem, 100cqi / 9.2);
+  font-size: min(3.4rem, 100cqi / (var(--chars, 27) * 0.33 + 0.3));
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: 0.01em;
   white-space: nowrap;
   text-shadow: 0 0 10px rgb(0 255 65 / 0.55);
+  /* Editable (see site.js); the block cursor below stands in for the caret. */
+  caret-color: transparent;
 }
 
 /* A blinking cursor after the name. */
@@ -584,8 +590,9 @@ kbd {
 }
 
 @media (max-width: 30rem) {
-  .portrait {
-    width: 6.5rem;
+  .portrait-badge {
+    width: 8rem;
+    height: 8rem;
   }
 
   .site-header {

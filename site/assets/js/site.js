@@ -10,6 +10,10 @@
 // along a smooth zoom path (van Wijk & Nuij, the same curve d3-zoom uses).
 // The page opens on the Hello card; the overview has the address #overview.
 //
+// The name is editable, like a terminal prompt: the caret is kept at the end
+// (where the blinking block cursor is), and the arrow keys and Esc still move
+// between cards while typing.
+//
 // Plain view: a normal scrolling page. Used without JavaScript, on small
 // screens, when reduced motion is requested, and when printing.
 
@@ -25,6 +29,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     setUpEmail();
+    setUpName();
     setUpHeaderOffset();
     setUpZoom();
   });
@@ -36,6 +41,52 @@
     new ResizeObserver(() => {
       root.style.setProperty("--header-h", `${header.offsetHeight}px`);
     }).observe(header);
+  }
+
+  function setUpName() {
+    const name = document.querySelector(".name");
+    const maxLength = 40;
+    try {
+      name.contentEditable = "plaintext-only";
+    } catch {
+      name.contentEditable = "true"; // browsers without plaintext-only
+    }
+
+    // Keep the caret at the end of the name, where the block cursor is.
+    const caretToEnd = () => {
+      if (document.activeElement !== name) return;
+      const selection = getSelection();
+      const range = selection.rangeCount ? selection.getRangeAt(0) : null;
+      if (range?.collapsed && name.contains(range.endContainer)) {
+        const rest = document.createRange();
+        rest.setStart(range.endContainer, range.endOffset);
+        rest.setEnd(name, name.childNodes.length);
+        if (rest.toString() === "") return;
+      }
+      const end = document.createRange();
+      end.selectNodeContents(name);
+      end.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(end);
+    };
+
+    // site.css shrinks the font as the name grows, so it stays on one line.
+    const fit = () => name.style.setProperty("--chars", Math.max(name.textContent.length, 27));
+
+    document.addEventListener("selectionchange", caretToEnd);
+    name.addEventListener("pointerup", caretToEnd);
+    name.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") event.preventDefault();
+      else caretToEnd();
+    });
+    name.addEventListener("input", () => {
+      if (name.textContent.length > maxLength) {
+        name.textContent = name.textContent.slice(0, maxLength);
+        caretToEnd();
+      }
+      fit();
+    });
+    fit();
   }
 
   // The address is assembled here so it never appears in the HTML source.
@@ -237,7 +288,9 @@
         camera = null;
         current = undefined;
         drawLinks();
-        go(frameForUrl(), { history: "none", instant: true });
+        // Focus lands on the card's heading; on Hello that is the editable name,
+        // so typing works straight away.
+        go(frameForUrl(), { history: "none", instant: true, focus: true });
         requestAnimationFrame(() => root.classList.add("ready"));
       } else {
         cancelAnimationFrame(animation);
@@ -275,7 +328,10 @@
 
     document.addEventListener("keydown", (event) => {
       if (!enabled || event.altKey || event.ctrlKey || event.metaKey) return;
-      if (event.target.closest("input, textarea, select, [contenteditable]")) return;
+      // In the editable name only the navigation keys are ours; the rest type.
+      const inName = event.target.closest(".name");
+      if (inName && !["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp", "PageDown", "PageUp", "Escape"].includes(event.key)) return;
+      if (!inName && event.target.closest("input, textarea, select, [contenteditable]")) return;
 
       const onControl = event.target.closest("a, button");
       switch (event.key) {
