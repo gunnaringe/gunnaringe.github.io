@@ -268,16 +268,30 @@
       if (next !== current) go(next, { focus: true });
     }
 
+    // Dotted curves from card to card. They run centre to centre, but a mask
+    // cuts out every card (plus a small gap), so the dots only show between
+    // the cards, never behind them.
     function drawLinks() {
-      const centres = frames.map(geometry);
+      const cards = frames.map(geometry);
       const curve = (a, b, bend) => {
         const mx = (a.x + b.x) / 2 - (b.y - a.y) * bend;
         const my = (a.y + b.y) / 2 + (b.x - a.x) * bend;
         return `M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`;
       };
       const paths = [];
-      for (let i = 1; i < centres.length; i++) paths.push(curve(centres[i - 1], centres[i], 0.18));
-      linkLayer.innerHTML = paths.map((d) => `<path d="${d}"/>`).join("");
+      for (let i = 1; i < cards.length; i++) paths.push(curve(cards[i - 1], cards[i], 0.18));
+
+      const GAP = 10;
+      const holes = cards.map((g) => {
+        const w = g.w * g.s + 2 * GAP;
+        const h = g.h * g.s + 2 * GAP;
+        return `<rect x="${-w / 2}" y="${-h / 2}" width="${w}" height="${h}" transform="translate(${g.x} ${g.y}) rotate(${g.r})"/>`;
+      });
+      linkLayer.innerHTML =
+        `<mask id="link-mask" maskUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">` +
+        `<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/>` +
+        `<g fill="#000">${holes.join("")}</g></mask>` +
+        `<g mask="url(#link-mask)">${paths.map((d) => `<path d="${d}"/>`).join("")}</g>`;
     }
 
     function setEnabled(on) {

@@ -35,7 +35,7 @@
 :root {
   color-scheme: dark;
   --paper: #000;
-  --card: rgb(0 20 6 / 0.82);
+  --card: #001005; /* solid, so nothing shows through the cards */
   --ink: #33ff66;
   --muted: #1fae48;
   --accent: #00ff41;
@@ -552,7 +552,7 @@ kbd {
     top: 0;
     width: 36rem;
     transform: translate(-50%, -50%) translate(var(--x), var(--y)) rotate(var(--r)) scale(var(--s));
-    transition: opacity 0.6s;
+    transition: filter 0.6s;
     cursor: zoom-in;
   }
 
@@ -560,8 +560,10 @@ kbd {
     cursor: auto;
   }
 
+  /* Dimmed rather than faded, so the cards stay solid and nothing shows
+     through them. */
   .zoom.has-active .frame:not(.is-active) {
-    opacity: 0.35;
+    filter: brightness(0.38);
   }
 
   .zoom .frame-hello {
