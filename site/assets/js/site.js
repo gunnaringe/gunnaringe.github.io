@@ -261,11 +261,13 @@
       if (frame && focus) frame.querySelector("[tabindex='-1']")?.focus({ preventScroll: true });
     }
 
+    // The cards and the overview form a loop: overview, Hello, ..., Contact,
+    // overview, Hello again. So one step past either end shows the overview.
     function move(direction) {
       const order = [null, ...frames];
       const index = order.indexOf(current);
-      const next = order[Math.max(0, Math.min(order.length - 1, index + direction))];
-      if (next !== current) go(next, { focus: true });
+      const next = order[(index + direction + order.length) % order.length];
+      go(next, { focus: true });
     }
 
     // Dotted curves from card to card. They run centre to centre, but a mask
