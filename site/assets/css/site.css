@@ -315,6 +315,12 @@ kbd {
   caret-color: transparent;
 }
 
+/* Browsers put a <br> in an emptied editable element, which would push the
+   cursor onto a second line and grow the card. */
+.name br {
+  display: none;
+}
+
 /* A blinking cursor after the name. */
 .name::after {
   content: "";
