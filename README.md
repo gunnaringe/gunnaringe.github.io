@@ -26,7 +26,7 @@ site/            what gets published
   assets/        css, js, font (handwriting, WOFF2), img (portrait, icons, og.png)
   .well-known/keybase.txt
 redirect/        the page GitHub Pages serves, forwarding to gunnaringe.sort.land
-tools/           sources for og.png and the PNG icons
+tools/           og.png/icon sources and the apphub.casa screenshot script
 build.sh         site/ -> dist/
 wrangler.jsonc   Cloudflare config: build, assets, custom domain
 ```
@@ -76,6 +76,16 @@ After changing `tools/og.html` or `site/assets/img/icon.svg`:
 npm install --no-save playwright
 node tools/render-images.mjs
 python3 -c "from PIL import Image; Image.open('site/assets/img/icon-192.png').convert('RGBA').save('site/favicon.ico', sizes=[(16,16),(32,32),(48,48)])"
+```
+
+## Refreshing the apphub.casa screenshots
+
+The Apps card shows a screenshot of the live <https://apphub.casa/>, in light
+and dark. To refresh both after apphub.casa changes:
+
+```sh
+npm install --no-save playwright
+node tools/screenshot-apphub.mjs
 ```
 
 ## History
