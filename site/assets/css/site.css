@@ -280,6 +280,7 @@ kbd {
   height: 10rem;
   padding: 0.8rem;
   background: var(--accent);
+  border-radius: var(--radius);
   box-shadow: 0 0 24px -2px rgb(0 255 65 / 0.6);
 }
 
