@@ -63,13 +63,10 @@ html {
   text-size-adjust: 100%;
   /* Keeps section headings clear of the sticky header when jumping to them.
      site.js keeps --header-h in step with the header's real height. */
-  scroll-padding-top: calc(var(--header-h, 4rem) + 1rem);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+  scroll-padding-top: calc(var(--header-h, 4rem) + 1.5rem);
+  /* Menu links glide down the page rather than jump, so it reads as one long
+     page. Kept with reduced motion too: it is short and user-initiated. */
+  scroll-behavior: smooth;
 }
 
 /* VT323 has one weight; faux bold smears its pixels. */
@@ -173,7 +170,7 @@ kbd {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
   padding: 0.6rem max(1rem, (100% - 42rem) / 2);
   background: rgb(0 0 0 / 0.85);
   border-bottom: 1px solid var(--line);
